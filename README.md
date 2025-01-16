@@ -1,9 +1,8 @@
-# How to run a server
-1. Install python and Django.
+# How to make a django project in a python virtual environment
+1. Install python.
 ```zsh
 # Mac
 $ brew install python3
-$ pip install django
 ```
 2. Make a new python virtual environment.
 ```zsh
@@ -17,14 +16,20 @@ $ source [venv-name]/bin/activate
 # Deactivate
 $ deactivate
 ```
-4. Clone this repository at the root directory of the project.
+4. Install django in python virtual environment.
 ```zsh
 # Mac
-$ git clone git@github.com:leeluna0476/jump-to-django.git [project-name]
+$ pip install django
 ```
-5. Run the server.
+5. Make a new django project.
 ```zsh
 # Mac
-$ cd [project-name]
-$ python3 manage.py runserver
+$ mkdir [project-dir]
+$ django-admin startproject config [project-dir]
+```
+6. Run the server.
+```zsh
+# Mac
+$ cd [project-dir]
+$ python3 ./manage.py runserver
 ```
