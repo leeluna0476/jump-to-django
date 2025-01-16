@@ -1,4 +1,4 @@
-# How to run a server
+# How to run a server in a python virtual environment
 1. Install python and Django.
 ```zsh
 # Mac
