@@ -42,7 +42,12 @@ def github_callback(request):
         error_description = token_response.get('error_description', 'Unknown error')
         return JsonResponse({"error": f"Failed to get access token: {error_description}"}, status=400)
 
-
     # add user to my server
+    user_url = 'https://api.github.com/user'
+    user_headers = {'Authorization': f'token {access_token}'}
+    user_info = requests.get(user_url, headers=user_headers).json()
+
+    username = user_info.get('login')
+    email = user_info.get('email')
 
     return redirect('pybo:index')
