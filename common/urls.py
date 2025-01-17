@@ -5,5 +5,6 @@ from . import views
 app_name = 'common'
 
 urlpatterns = [
-        path('login/', views.oauth_login, name='oauth_login'),
+        path('github/oauth/', views.github_oauth, name='github_oauth'),
+        path('github/callback/', views.github_callback, name='github_callback'),
 ]
