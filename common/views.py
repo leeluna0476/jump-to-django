@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from config import api_client
 from django.http import JsonResponse
-from . import urls
+from . import urls, models
 import requests
 
 def github_oauth(request):
@@ -47,7 +47,12 @@ def github_callback(request):
     user_headers = {'Authorization': f'token {access_token}'}
     user_info = requests.get(user_url, headers=user_headers).json()
 
+    user_id = user_info.get('id')
     username = user_info.get('login')
-    email = user_info.get('email')
+
+    user, created = models.GithubUser.objects.get_or_create(user_id=user_id, username=username)
+    if created:
+        user.save()
+    #else: handle errors
 
     return redirect('pybo:index')
