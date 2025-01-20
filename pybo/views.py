@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 # Create your views here.
 from django.utils import timezone
 from django.http import HttpResponseNotAllowed
+from django.contrib.auth.decorators import login_required
 from .models import Question, Answer
 from .forms import QuestionForm, AnswerForm
 
@@ -32,6 +33,7 @@ def answer_create(request, question_id):
     context = {'question': question, 'form': form }
     return render(request, 'pybo/question_detail.html', context)
 
+@login_required
 def question_create(request):
     if request.method == 'POST':
         form = QuestionForm(request.POST)

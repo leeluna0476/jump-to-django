@@ -128,3 +128,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'common.GithubUser'
+
+LOGIN_URL='/common/github/oauth/'

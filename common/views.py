@@ -11,8 +11,10 @@ import requests
 # set credential scopes
 # Authorization request -> to the resource owner
 def github_oauth(request):
+    next_url = request.GET.get('next', 'pybo:index')
+
     client_id = api_client.CLIENT_ID
-    redirect_uri = f'http://localhost:8000/{urls.app_name}/github/callback/'
+    redirect_uri = f'http://localhost:8000/{urls.app_name}/github/callback/?next={next_url}'
     scope = 'read:user user:email'
     auth_url = (
         f"https://github.com/login/oauth/authorize?"
@@ -64,7 +66,8 @@ def github_callback(request):
 
     login(request, user)
 
-    return redirect('pybo:index')
+    next_url = request.GET.get('next', 'pybo:index')
+    return redirect(next_url)
 
 def logout_view(request):
     logout(request)
