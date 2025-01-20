@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from config import api_client
 from django.http import JsonResponse
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from . import urls, models
 import requests
 
@@ -64,4 +64,8 @@ def github_callback(request):
 
     login(request, user)
 
+    return redirect('pybo:index')
+
+def logout_view(request):
+    logout(request)
     return redirect('pybo:index')
