@@ -8,7 +8,7 @@ from .models import Question, Answer
 from .forms import QuestionForm, AnswerForm
 
 def index(request):
-    page = request.GET.get('page', '1')
+#    page = request.GET.get('page', '1')
     question_list = Question.objects.order_by('-create_date')
 #    paginator = Paginator(question_list, 10)
 #    page_obj = paginator.get_page(page)
@@ -36,7 +36,6 @@ def answer_create(request, question_id):
     #너 왜
     context = {'question': question, 'form': form }
     return render(request, 'pybo/question_detail.html', context)
-
 
 def question_create(request):
     if request.method == 'POST':
