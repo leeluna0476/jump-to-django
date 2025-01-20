@@ -7,6 +7,7 @@
 			<th>번호</th>
 			<th>제목</th>
 			<th>작성일시</th>
+			<th>글쓴이</th>
 		</tr>
 		</thread>
 		<tbody>
@@ -18,6 +19,11 @@
 				<a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
 			</td>
 			<td>{{ question.create_date }}</td>
+			<td>
+				{% if question.author %}
+				{{ question.author.username }}
+				{% endif %}
+			</td>
 		</tr>
 		{% endfor %}
 		{% else %}

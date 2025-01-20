@@ -40,6 +40,9 @@ def question_create(request):
         if form.is_valid():
             question = form.save(commit=False)
             question.create_date = timezone.now()
+            user = request.user
+            question.author = user
+            print(user)
             question.save()
             return redirect('pybo:index')
     else:
