@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 
 from config import api_client
 from django.http import JsonResponse
+from django.contrib.auth import login
 from . import urls, models
 import requests
 
@@ -41,6 +42,7 @@ def github_callback(request):
     response = requests.post(token_url, headers=headers, data=data)
     token_response = response.json()
     access_token = token_response.get('access_token')
+    refresh_token = token_response.get('refresh_token')
     # if null == if the authentication server responds with an http 400 code with error parameters
     if not access_token:
         error_description = token_response.get('error_description', 'Unknown error')
@@ -51,12 +53,15 @@ def github_callback(request):
     user_headers = {'Authorization': f'token {access_token}'}
     user_info = requests.get(user_url, headers=user_headers).json()
 
-    user_id = user_info.get('id')
     username = user_info.get('login')
 
     # create and save a new user object if it's not in the database
-    user, created = models.GithubUser.objects.get_or_create(user_id=user_id, username=username)
+    user, created = models.GithubUser.objects.get_or_create(username=username)
     if created:
+        user.access_token = access_token
+        user.refresh_token = refresh_token
         user.save()
+
+    login(request, user)
 
     return redirect('pybo:index')
