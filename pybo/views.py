@@ -9,12 +9,6 @@ from .forms import QuestionForm, AnswerForm
 def index(request):
     question_list = Question.objects.order_by('-create_date')
     context = {'question_list': question_list}
-    
-    if request.user.is_authenticated:
-        print('user authenticated')
-    else:
-        print('user not authenticated')
-
     return render(request, 'pybo/question_list.html', context)
 
 def detail(request, question_id):
