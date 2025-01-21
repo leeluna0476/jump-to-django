@@ -42,7 +42,6 @@ def question_create(request):
             question.create_date = timezone.now()
             user = request.user
             question.author = user
-            print(user)
             question.save()
             return redirect('pybo:index')
     else:
