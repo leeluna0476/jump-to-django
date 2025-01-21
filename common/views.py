@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 
 # Create your views here.
-
 from config import api_client
 from django.http import JsonResponse
 from django.contrib.auth import login, logout
@@ -57,13 +56,11 @@ def github_callback(request):
 
     username = user_info.get('login')
 
-    # create and save a new user object if it's not in the database
-    user, created = models.GithubUser.objects.get_or_create(username=username)
-    if created:
-        user.access_token = access_token
-        user.refresh_token = refresh_token
-        user.save()
-
+    # save the user object
+    user = models.GithubUser.objects.get_or_create(username=username)[0]
+    user.access_token = access_token
+    user.refresh_token = refresh_token
+    user.save()
     login(request, user)
 
     next_url = request.GET.get('next', 'pybo:index')
