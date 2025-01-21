@@ -52,7 +52,6 @@ def question_create(request):
 
 def question_delete(request, question_id):
     if request.method == 'POST':
-        print(question_id)
         question = get_object_or_404(Question, pk=question_id)
         if request.user.is_authenticated and request.user == question.author:
             question.delete()
