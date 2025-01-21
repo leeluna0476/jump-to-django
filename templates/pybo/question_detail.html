@@ -15,7 +15,7 @@
 		</div>
 	</div>
 	{% if user == question.author %}
-		<input type="button" value="질문삭제" class="btn btn-primary" onclick="confirmDelete({{ question.id }})">
+		<input type="button" value="질문삭제" class="btn btn-primary" onclick="confirmDeleteQuestion({{ question.id }})">
 	{% endif %}
 	<!-- answer -->
 	<h5 class="border-bottom my-3 py-2">{{ question.answer_set.count }}개의 답변이 있습니다.</h5>
@@ -23,6 +23,11 @@
 	<div class="card my-3">
 		<div class="card-body">
 			<div class="card-text" style="white-space: pre-line;">{{ answer.content }}</div>
+			<div class="d-flex  justify-content-end">
+				{% if user == answer.author %}
+					<input type="button" value="답변삭제" class="btn btn-light" onclick="confirmDeleteAnswer({{ answer.id }}, {{ question.id }})">
+				{% endif %}
+			</div>
 			<div class="d-flex  justify-content-end">
 				<div class="badge bg-light text-dark p-2 text-start">
 					<div class="mb-2">

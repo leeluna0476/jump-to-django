@@ -50,10 +50,20 @@ def question_create(request):
     context = {'form': form}
     return render(request, 'pybo/question_form.html', context)
 
+@login_required
 def question_delete(request, question_id):
     if request.method == 'POST':
         question = get_object_or_404(Question, pk=question_id)
-        if request.user.is_authenticated and request.user == question.author:
+        if request.user == question.author:
             question.delete()
+            return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
+@login_required
+def answer_delete(request, answer_id):
+    if request.method == 'POST':
+        answer = get_object_or_404(Answer, pk=answer_id)
+        if request.user == answer.author:
+            answer.delete()
             return JsonResponse({'success': True})
     return JsonResponse({'success': False})
