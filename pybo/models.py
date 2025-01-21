@@ -17,3 +17,4 @@ class   Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     content = models.TextField()
     create_date = models.DateTimeField()
+    author = models.ForeignKey(GithubUser, on_delete=models.CASCADE, null=True)
