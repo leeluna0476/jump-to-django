@@ -61,7 +61,8 @@ def github_callback(request):
     user.access_token = access_token
     user.refresh_token = refresh_token
     user.save()
-    login(request, user)
+    if not request.user.is_authenticated:
+        login(request, user)
 
     next_url = request.GET.get('next', 'pybo:index')
     return redirect(next_url)
