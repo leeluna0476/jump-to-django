@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from django.utils import timezone
-from django.http import HttpResponseNotAllowed
+from django.http import HttpResponseNotAllowed, JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import Question, Answer
 from .forms import QuestionForm, AnswerForm
@@ -49,3 +49,12 @@ def question_create(request):
         form = QuestionForm()
     context = {'form': form}
     return render(request, 'pybo/question_form.html', context)
+
+def question_delete(request, question_id):
+    if request.method == 'POST':
+        print(question_id)
+        question = get_object_or_404(Question, pk=question_id)
+        if request.user.is_authenticated and request.user == question.author:
+            question.delete()
+            return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
