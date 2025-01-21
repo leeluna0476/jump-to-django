@@ -69,4 +69,5 @@ def github_callback(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('pybo:index')
+    next_url = request.GET.get('next', 'pybo:index')
+    return redirect(next_url)
