@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.http import HttpResponseNotAllowed, JsonResponse
 from django.contrib.auth.decorators import login_required
+from common.models import GithubUser
 from .models import Question, Answer
 from .forms import QuestionForm, AnswerForm
 
@@ -35,14 +36,20 @@ def answer_create(request, question_id):
     context = {'question': question, 'form': form }
     return render(request, 'pybo/question_detail.html', context)
 
-@login_required
+#API test
+#@login_required
 def question_create(request):
     if request.method == 'POST':
+        print(request.POST)
         form = QuestionForm(request.POST)
         if form.is_valid():
             question = form.save(commit=False)
             question.create_date = timezone.now()
-            question.author = request.user
+            #API test
+            if request.user.is_authenticated:
+                question.author = request.user
+            else:
+                question.author = GithubUser.objects.get(username="test");
             question.save()
             return redirect('pybo:index')
     else:
@@ -50,7 +57,8 @@ def question_create(request):
     context = {'form': form}
     return render(request, 'pybo/question_form.html', context)
 
-@login_required
+#API test
+#@login_required
 def question_delete(request, question_id):
     if request.method == 'POST':
         question = get_object_or_404(Question, pk=question_id)
@@ -59,7 +67,8 @@ def question_delete(request, question_id):
             return JsonResponse({'success': True})
     return JsonResponse({'success': False})
 
-@login_required
+#API test
+#@login_required
 def answer_delete(request, answer_id):
     if request.method == 'POST':
         answer = get_object_or_404(Answer, pk=answer_id)

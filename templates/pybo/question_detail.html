@@ -45,7 +45,7 @@
 	{% endfor %}
 	<!-- post answer -->
 	<form action="{% url 'pybo:answer_create' question.id %}" method="post" class="my-3">
-		{% csrf_token %}
+		<!--		{% csrf_token %}-->
 		<!-- error handling start -->
 		{% if form.errors %}
 		<div class="alert alert-danger" role="alert">

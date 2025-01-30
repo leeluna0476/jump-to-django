@@ -9,6 +9,10 @@ import requests
 
 # set credential scopes
 # Authorization request -> to the resource owner
+#def login(request):
+#    if not request.user.is_authenticated: # or refresh token expired
+#        return redirect('pybo:github_oauth')
+
 def github_oauth(request):
     next_url = request.GET.get('next', 'pybo:index')
 
