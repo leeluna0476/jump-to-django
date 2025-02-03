@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from django.utils import timezone
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from common.models import GithubUser
@@ -58,7 +58,7 @@ def question_create(request):
             if request.user.is_authenticated:
                 question.author = request.user
             else:
-                question.author = GithubUser.objects.get(username="test");
+                question.author = GithubUser.objects.get(username='test');
             question.save()
             return redirect('pybo:index')
     else:
@@ -80,9 +80,14 @@ def question_delete(request, question_id):
 #@login_required
 @require_http_methods(['PUT'])
 def question_modify(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
+## handle 404 manually by JsonResponse
+    try:
+        question = get_object_or_404(Question, pk=question_id)
+    except Http404:
+        return JsonResponse({'error': 'Not Found', 'message': f'Question with ID { question_id } not found'}, status=404)
+
     if request.user != question.author:
-        return JsonResponse({"error": "Forbidden", "message": "Cannot modify question"}, status=403)
+        return JsonResponse({'error': 'Forbidden', 'message': 'Cannot modify question'}, status=403)
 
     try:
         data = json.loads(request.body)
@@ -91,8 +96,11 @@ def question_modify(request, question_id):
     form = QuestionForm(data, instance=question)
     if form.is_valid():
         question = form.save(commit=True)
-    context = {'question': question, 'form': form }
-    return render(request, 'pybo/question_detail.html', context)
+        context = {'question': question, 'form': form }
+        return render(request, 'pybo/question_detail.html', context)
+    response = JsonResponse({'error': 'Bad Request', 'message': 'Missing required fields or invalid data', 'details': form.errors}, status=400)
+    response['Content-Type'] = 'application/json; charset=utf-8';
+    return response
 
 #API test
 #@login_required
