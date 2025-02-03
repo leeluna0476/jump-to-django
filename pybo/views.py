@@ -8,6 +8,7 @@ from django.views.decorators.http import require_http_methods
 from common.models import GithubUser
 from .models import Question, Answer
 from .forms import QuestionForm, AnswerForm
+import json
 
 @require_http_methods(['GET'])
 def index(request):
@@ -24,7 +25,11 @@ def detail(request, question_id):
 @require_http_methods(['POST'])
 def answer_create(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    form = AnswerForm(request.POST)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        data = request.POST
+    form = AnswerForm(data)
     if form.is_valid():
         answer = form.save(commit=False)
         answer.question = question
@@ -41,7 +46,11 @@ def answer_create(request, question_id):
 @require_http_methods(['POST', 'GET'])
 def question_create(request):
     if request.method == 'POST':
-        form = QuestionForm(request.POST)
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            data = request.POST
+        form = QuestionForm(data)
         if form.is_valid():
             question = form.save(commit=False)
             question.create_date = timezone.now()
