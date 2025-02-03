@@ -78,6 +78,24 @@ def question_delete(request, question_id):
 
 #API test
 #@login_required
+@require_http_methods(['PUT'])
+def question_modify(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.user != question.author:
+        return JsonResponse({"error": "Forbidden", "message": "Cannot modify question"}, status=403)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        data = request.body
+    form = QuestionForm(data, instance=question)
+    if form.is_valid():
+        question = form.save(commit=True)
+    context = {'question': question, 'form': form }
+    return render(request, 'pybo/question_detail.html', context)
+
+#API test
+#@login_required
 @require_http_methods(['DELETE'])
 def answer_delete(request, answer_id):
     answer = get_object_or_404(Answer, pk=answer_id)
