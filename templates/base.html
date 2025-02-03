@@ -19,7 +19,7 @@
             if (isConfirmed) {
                 // AJAX 요청을 보내서 삭제 처리
                 fetch(`/pybo/question/delete/${questionId}/`, {
-                    method: 'POST',
+                    method: 'DELETE',
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}'  // CSRF 토큰을 포함
                     }
@@ -48,7 +48,7 @@
             if (isConfirmed) {
                 // AJAX 요청을 보내서 삭제 처리
                 fetch(`/pybo/answer/delete/${answerId}/`, {
-                    method: 'POST',
+                    method: 'DELETE',
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}'  // CSRF 토큰을 포함
                     }

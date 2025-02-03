@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from config import api_client
 from django.http import JsonResponse
 from django.contrib.auth import login, logout
+from django.views.decorators.http import require_POST, require_GET
 from . import urls, models
 import requests
 
@@ -13,6 +14,7 @@ import requests
 #    if not request.user.is_authenticated: # or refresh token expired
 #        return redirect('pybo:github_oauth')
 
+@require_GET
 def github_oauth(request):
     next_url = request.GET.get('next', 'pybo:index')
 
@@ -26,6 +28,7 @@ def github_oauth(request):
     return redirect(auth_url)
 
 # after authorization being granted by the user
+@require_GET
 def github_callback(request):
     code = request.GET.get('code')
     # invalid code
@@ -71,7 +74,8 @@ def github_callback(request):
     next_url = request.GET.get('next', 'pybo:index')
     return redirect(next_url)
 
+@require_POST
 def logout_view(request):
     logout(request)
-    next_url = request.GET.get('next', 'pybo:index')
+    next_url = request.POST.get('next', 'pybo:index')
     return redirect(next_url)
