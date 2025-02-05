@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.http import JsonResponse, Http404
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
+from .decorators import require_http_methods
 from common.models import GithubUser
 from .models import Question, Answer
 from .forms import QuestionForm, AnswerForm
